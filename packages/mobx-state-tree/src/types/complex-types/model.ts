@@ -289,7 +289,7 @@ function toPropertiesObject(declaredProps: ModelPropertiesDeclaration): ModelPro
                     [key]: optional(value, {})
                 })
             } else if (value instanceof ArrayType) {
-                return Object.assign({}, props, { [key]: optional(value, []) })
+                return Object.assign({}, props, { [key]: value })
                 // its already a type
             } else if (isType(value)) {
                 return props

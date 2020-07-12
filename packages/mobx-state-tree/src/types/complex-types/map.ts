@@ -291,7 +291,20 @@ export class MapType<IT extends IAnyType> extends ComplexType<
     }
 
     createNewInstance(childNodes: IChildNodesMap): this["T"] {
-        return new MSTMap(childNodes) as any
+        const map = new MSTMap(childNodes) as any
+        var handler = {
+            get(target: any, propKey: any, receiver: any) {
+                return propKey in target ||
+                    propKey === "dehancer" ||
+                    propKey === "interceptors" ||
+                    propKey === "changeListeners"
+                    ? target[propKey]
+                    : target.get(propKey.toString())
+            }
+        }
+
+        var proxy = new Proxy(map, handler)
+        return proxy
     }
 
     finalizeNewInstance(node: this["N"], instance: ObservableMap<string, any>): void {
